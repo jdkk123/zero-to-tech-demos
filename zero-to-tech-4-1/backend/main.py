@@ -13,7 +13,16 @@ from storage import init_db  # ← 新增：跟存储层打交道，只经过这
 import uuid
 from fastapi import Request, Response
 
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+# ← 新增：加载环境变量
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS").split(",")
+
+
+# ← 新增：从环境变量里读取允许的来源
 init_db()
 
 
@@ -21,7 +30,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["GET", "POST"],
     allow_credentials=True,          # ← 新增：允许跨源请求带上 cookie
 )
